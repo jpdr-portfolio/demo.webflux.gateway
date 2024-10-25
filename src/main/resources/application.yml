@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: "demo.webflux.gateway"
+  output:
+    ansi:
+      enabled: always
+  cloud:
+    gateway:
+      routes:
+        - id: users
+          uri: ${APP_BASE_URL_USER}
+          predicates:
+            - Path=/users/**, /users
+          filters:
+            - RewritePath=/users/(?<segment>.*), /users/$\{segment}
+            - TokenValidatorFilter
+        - id: accounts
+          uri: ${APP_BASE_URL_ACCOUNT}
+          predicates:
+            - Path=/accounts/**, /accounts
+          filters:
+            - RewritePath=/accounts/(?<segment>/?.*), /accounts/$\{segment}
+            - TokenValidatorFilter
+        - id: retailers
+          uri: ${APP_BASE_URL_RETAILER}
+          predicates:
+            - Path=/retailers/**, /retailers
+          filters:
+            - RewritePath=/retailers/(?<segment>/?.*), /retailers/$\{segment}
+            - TokenValidatorFilter
+        - id: products
+          uri: ${APP_BASE_URL_PRODUCT}
+          predicates:
+            - Path=/products/**, /products
+          filters:
+            - RewritePath=/products/(?<segment>/?.*), /products/$\{segment}
+            - TokenValidatorFilter
+        - id: stock
+          uri: ${APP_BASE_URL_STOCK}
+          predicates:
+            - Path=/stock/**, /stock
+          filters:
+            - RewritePath=/stock/(?<segment>/?.*), /stock/$\{segment}
+            - TokenValidatorFilter
+        - id: purchases
+          uri: ${APP_BASE_URL_PURCHASE}
+          predicates:
+            - Path=/purchases/**, /purchases
+          filters:
+            - RewritePath=/purchases/(?<segment>/?.*), /purchases/$\{segment}
+            - TokenValidatorFilter
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+app:
+  base-url:
+    token: ${APP_BASE_URL_TOKEN}
