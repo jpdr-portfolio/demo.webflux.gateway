@@ -21,8 +21,8 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class WebClientConfig {
   
-  @Value("${app.base-url.token}")
-  private String tokenBaseUrl;
+  @Value("${app.base-url.authentication}")
+  private String authenticationBaseUrl;
   
   @Bean(name = "connectionProvider")
   @Scope(scopeName = "prototype")
@@ -44,15 +44,15 @@ public class WebClientConfig {
     @Qualifier("connectionProvider") ConnectionProvider connectionProvider,
     @Qualifier("sslContextSpec") Http11SslContextSpec sslContextSpec){
     return new ReactorClientHttpConnector(HttpClient.create(connectionProvider)
-      .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
-      .responseTimeout(Duration.ofMillis(5000))
+      .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 20000)
+      .responseTimeout(Duration.ofMillis(20000))
       .doOnConnected( connection ->  connection
-        .addHandlerLast(new ReadTimeoutHandler(5000, TimeUnit.MILLISECONDS))
-        .addHandlerLast(new WriteTimeoutHandler(5000, TimeUnit.MILLISECONDS)))
+        .addHandlerLast(new ReadTimeoutHandler(20000, TimeUnit.MILLISECONDS))
+        .addHandlerLast(new WriteTimeoutHandler(20000, TimeUnit.MILLISECONDS)))
       .secure(spec -> spec.sslContext(sslContextSpec)
-        .handshakeTimeout(Duration.ofMillis(5000))
-        .closeNotifyFlushTimeout(Duration.ofMillis(5000))
-        .closeNotifyReadTimeout(Duration.ofMillis(5000))));
+        .handshakeTimeout(Duration.ofMillis(20000))
+        .closeNotifyFlushTimeout(Duration.ofMillis(20000))
+        .closeNotifyReadTimeout(Duration.ofMillis(20000))));
   }
   
   @Bean(name = "exchangeStrategies")
@@ -67,7 +67,7 @@ public class WebClientConfig {
   public WebClient accountWebClient(WebClient.Builder webClientBuilder,
     @Qualifier("reactorClientHttpConnector") ReactorClientHttpConnector reactorClientHttpConnector,
     @Qualifier("exchangeStrategies") ExchangeStrategies exchangeStrategies){
-    return webClientBuilder.baseUrl(tokenBaseUrl)
+    return webClientBuilder.baseUrl(this.authenticationBaseUrl)
       .clientConnector(reactorClientHttpConnector)
       .exchangeStrategies(exchangeStrategies)
       .build();

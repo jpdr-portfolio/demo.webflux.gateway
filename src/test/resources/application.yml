@@ -21,19 +21,33 @@ spring:
           filters:
             - RewritePath=/accounts/(?<segment>/?.*), /accounts/$\{segment}
             - TokenValidatorFilter
-        - id: retailers
-          uri: http://localhost:8083
-          predicates:
-            - Path=/retailers/**, /retailers
-          filters:
-            - RewritePath=/retailers/(?<segment>/?.*), /retailers/$\{segment}
-            - TokenValidatorFilter
         - id: products
           uri: http://localhost:8084
           predicates:
             - Path=/products/**, /products
           filters:
             - RewritePath=/products/(?<segment>/?.*), /products/$\{segment}
+            - TokenValidatorFilter
+        - id: categories
+          uri: http://localhost:8084
+          predicates:
+            - Path=/categories/**, /categories
+          filters:
+            - RewritePath=/categories/(?<segment>/?.*), /categories/$\{segment}
+            - TokenValidatorFilter
+        - id: subcategories
+          uri: http://localhost:8084
+          predicates:
+            - Path=/subcategories/**, /subcategories
+          filters:
+            - RewritePath=/subcategories/(?<segment>/?.*), /subcategories/$\{segment}
+            - TokenValidatorFilter
+        - id: retailers
+          uri: http://localhost:8084
+          predicates:
+            - Path=/retailers/**, /retailers
+          filters:
+            - RewritePath=/retailers/(?<segment>/?.*), /retailers/$\{segment}
             - TokenValidatorFilter
         - id: stock
           uri: http://localhost:8085

@@ -21,19 +21,33 @@ spring:
           filters:
             - RewritePath=/accounts/(?<segment>/?.*), /accounts/$\{segment}
             - TokenValidatorFilter
-        - id: retailers
-          uri: ${APP_BASE_URL_RETAILER}
-          predicates:
-            - Path=/retailers/**, /retailers
-          filters:
-            - RewritePath=/retailers/(?<segment>/?.*), /retailers/$\{segment}
-            - TokenValidatorFilter
         - id: products
           uri: ${APP_BASE_URL_PRODUCT}
           predicates:
             - Path=/products/**, /products
           filters:
             - RewritePath=/products/(?<segment>/?.*), /products/$\{segment}
+            - TokenValidatorFilter
+        - id: categories
+          uri: ${APP_BASE_URL_PRODUCT}
+          predicates:
+            - Path=/categories/**, /categories
+          filters:
+            - RewritePath=/categories/(?<segment>/?.*), /categories/$\{segment}
+            - TokenValidatorFilter
+        - id: subcategories
+          uri: ${APP_BASE_URL_PRODUCT}
+          predicates:
+            - Path=/subcategories/**, /subcategories
+          filters:
+            - RewritePath=/subcategories/(?<segment>/?.*), /subcategories/$\{segment}
+            - TokenValidatorFilter
+        - id: retailers
+          uri: ${APP_BASE_URL_PRODUCT}
+          predicates:
+            - Path=/retailers/**, /retailers
+          filters:
+            - RewritePath=/retailers/(?<segment>/?.*), /retailers/$\{segment}
             - TokenValidatorFilter
         - id: stock
           uri: ${APP_BASE_URL_STOCK}
@@ -51,7 +65,7 @@ spring:
             - TokenValidatorFilter
 logging:
   level:
-    org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.gateway: ${APP_LOG_LEVEL}
 app:
   base-url:
-    token: ${APP_BASE_URL_TOKEN}
+    authentication: ${APP_BASE_URL_AUTHENTICATION}
